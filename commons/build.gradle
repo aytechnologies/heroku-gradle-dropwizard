@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "io.dropwizard:dropwizard-core:+"
+    compile "io.dropwizard:dropwizard-metrics:+"
+    compile "io.dropwizard:dropwizard-hibernate:+"
+    compile 'com.rabbitmq:amqp-client:3.5.4'
+}

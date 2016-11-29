@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+mainClassName = "ca.aytech.example.WebApplication"
+
+run.args = ["server", "../example.yaml"]
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "io.dropwizard:dropwizard-core:+"
+    compile "io.dropwizard:dropwizard-hibernate:+"
+    compile "io.dropwizard:dropwizard-assets:+"
+    compile "io.dropwizard:dropwizard-migrations:+"
+    compile "postgresql:postgresql:+"
+    compile 'com.rabbitmq:amqp-client:3.5.4'
+    compile project (':commons')
+}
+
+task stage(dependsOn: ['clean', 'installDist'])
+

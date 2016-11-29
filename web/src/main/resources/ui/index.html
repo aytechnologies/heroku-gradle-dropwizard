@@ -1,0 +1,105 @@
+<html ng-app="exampleApp">
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var exampleApp = angular.module('exampleApp',[]);
+
+    exampleApp.controller('ExampleController', function($scope, $http){
+        $scope.addMemo = function() {
+            $http({
+                method: 'POST',
+                url: '/api/memos',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                transformRequest: function(obj) {
+                    var str = [];
+                    for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                },
+                data: { content: $scope.content }
+            }).success(function(data){
+                $scope.memos.unshift(data);
+            });
+        };
+
+        $scope.memos = [];
+
+        $scope.init = function(){
+            $http.get('/api/memos').then(
+                function(response){
+                    $scope.memos = response.data;
+                }
+            );
+        }();
+    });
+</script>
+<div class="container-fluid" ng-controller="ExampleController">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="page-header">
+                <h1>
+                    Heroku Dropwizard Gradle Example <small>(<a href="http://www.github.com/aminy/heroku-dropwizard-gradle.git">source</a>)</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <form role="form">
+                <div class="form-group">
+                    <label>
+                        Enter new Memo
+                    </label>
+                    <input type="text" class="form-control" ng-model="content" />
+                </div>
+                <button ng-click="addMemo()" class="btn btn-default">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Memo Content
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="memo in memos">
+                    <td>
+                        {{memo.id}}
+                    </td>
+                    <td>
+                        {{memo.content}}
+                    </td>
+                    <td>
+                        {{memo.status}}
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+server:
+  rootPath: /api/*
+  applicationConnectors:
+  - type: http
+    port: 9090
+  adminConnectors:
+  - type: http
+    port: 9091
+
+database:
+  driverClass: org.postgresql.Driver
+  user: postgres
+  password: password
+  url: jdbc:postgresql://172.17.0.7:5432
+  initialSize: 3
+  minSize: 1
+  maxSize: 5
+
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'com.example.app' to DEBUG.
+    # com.example.app: DEBUG
+
+    org.hibernate.SQL: INFO
+
+  appenders:
+    - type: console
+queue:
+  exchangeName: exampleExchange
+  routingKey: exampleRoute
+  queueName: exampleQueue
+  queueUrl: amqp://example:password@172.17.0.8:5672
